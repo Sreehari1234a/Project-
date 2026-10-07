@@ -10,7 +10,7 @@ public class EventDetailsFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(() -> {
+       
             new EventDetailsFrame().setVisible(true);
         });
     }

@@ -9,8 +9,7 @@ public class LoginFrame extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(() -> {
+    public static void main(String[]args){
             new LoginFrame().setVisible(true);
         });
     }

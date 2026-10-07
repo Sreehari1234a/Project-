@@ -10,8 +10,8 @@ public class ParticipantFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(() -> {
+       
             new ParticipantFrame().setVisible(true);
-        });
+    
     }
 }

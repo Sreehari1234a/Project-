@@ -10,7 +10,6 @@ public class RegisterFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(() -> {
             new RegisterFrame().setVisible(true);
         });
     }

@@ -10,7 +10,7 @@ public class DashboardFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(() -> {
+       
             new DashboardFrame().setVisible(true);
         });
     }

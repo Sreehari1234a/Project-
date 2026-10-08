@@ -31,7 +31,6 @@ public class Sign {
         JRadioButton dep2 = new JRadioButton("EEE");
         JRadioButton dep3 = new JRadioButton("ECE");
         JRadioButton dep4 = new JRadioButton("MECH");
-        JRadioButton s1= new JRadiobutton("S1");
         ButtonGroup group = new ButtonGroup();
         group.add(dep1);
         group.add(dep2);

@@ -1,4 +1,4 @@
-JPanel panel = new JPanel();
+JPanel panel 1 = new JPanel();
         panel.setLayout(new GridLayout(4, 1, 10, 10));
 
         JLabel title = new JLabel(

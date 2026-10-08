@@ -27,13 +27,24 @@ public class Sign {
 
         JTextField nameField = new JTextField();
         JTextField rollField = new JTextField();
-        JTextField departmentField = new JTextField();
+        JRadiobutton dep1 = new JRadiobutton("CSE");
+        JRadiobutton dep2 = new JRadiobutton("EEE");
+        JRadiobutton dep3 = new JRadiobutton("ECE");
+        JRadiobutton dep4 = new JRadiobutton("MECH");
+        JRadiobutton s1= new JRadiobutton("S1");
         ButtonGroup group = new ButtonGroup();
         group.add(dep1);
         group.add(dep2);
         group.add(dep3);
         group.add(dep4);
-        JTextField semesterField = new JTextField();
+        JRadiobutton s1= new JRadiobutton("S1");
+        JRadiobutton s2= new JRadiobutton("S2");
+        JRadiobutton s3= new JRadiobutton("S3");
+        JRadiobutton s4= new JRadiobutton("S4");
+        JRadiobutton s5= new JRadiobutton("S5");
+        JRadiobutton s6= new JRadiobutton("S6");
+        JRadiobutton s7= new JRadiobutton("S7");
+        JRadiobutton s8= new JRadiobutton("S8");
         JTextField collegeField = new JTextField();
         JTextField emailField = new JTextField();
         JTextField phoneField = new JTextField();

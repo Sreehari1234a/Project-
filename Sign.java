@@ -28,6 +28,11 @@ public class Sign {
         JTextField nameField = new JTextField();
         JTextField rollField = new JTextField();
         JTextField departmentField = new JTextField();
+        ButtonGroup group = new ButtonGroup();
+        group.add(dep1);
+        group.add(dep2);
+        group.add(dep3);
+        group.add(dep4);
         JTextField semesterField = new JTextField();
         JTextField collegeField = new JTextField();
         JTextField emailField = new JTextField();

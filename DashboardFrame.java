@@ -12,6 +12,6 @@ public class DashboardFrame extends JFrame {
     public static void main(String[] args) {
        
             new DashboardFrame().setVisible(true);
-        });
+        };
     }
 }

@@ -45,6 +45,15 @@ public class Sign {
         JRadiobutton s6= new JRadiobutton("S6");
         JRadiobutton s7= new JRadiobutton("S7");
         JRadiobutton s8= new JRadiobutton("S8");
+        ButtonGroup grp = new ButtonGroup();
+        grp.add(s1);
+        grp.add(s2);
+        grp.add(s3);
+        grp.add(s4);
+        grp.add(s5);
+        grp.add(s6);
+        grp.add(s7);
+        grp.add(s8);
         JTextField collegeField = new JTextField();
         JTextField emailField = new JTextField();
         JTextField phoneField = new JTextField();

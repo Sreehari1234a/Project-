@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class FiveFrames {
+public class PFiveFrames {
 
     public static void main(String[] args) {
 

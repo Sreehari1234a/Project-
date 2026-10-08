@@ -45,10 +45,20 @@ public class Sign {
         frame.add(rollField);
 
         frame.add(departmentLabel);
-        frame.add(departmentField);
-
+        frame.add(dep1);
+        frame.add(dep2);
+        frame.add(dep3);
+        frame.add(dep4);
+        
         frame.add(semesterLabel);
-        frame.add(semesterField);
+        frame.add(s1);
+        frame.add(s2);
+        frame.add(s3);
+        frame.add(s4);
+        frame.add(s5);
+        frame.add(s6);
+        frame.add(s7);
+        frame.add(s8);
 
         frame.add(collegeLabel);
         frame.add(collegeField);

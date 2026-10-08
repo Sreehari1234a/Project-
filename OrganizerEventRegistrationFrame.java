@@ -77,24 +77,6 @@ public class OrganizerEventRegistrationFrame extends JFrame {
         panel.add(venueField);
         panel.add(Box.createVerticalStrut(12));
 
-        // Event Description
-        JLabel descriptionLabel = new JLabel("Event Description");
-
-        JTextArea descriptionArea = new JTextArea(4, 30);
-        descriptionArea.setLineWrap(true);
-        descriptionArea.setWrapStyleWord(true);
-
-        JScrollPane descriptionScroll =
-                new JScrollPane(descriptionArea);
-
-        descriptionScroll.setMaximumSize(
-                new Dimension(450, 100)
-        );
-
-        panel.add(descriptionLabel);
-        panel.add(descriptionScroll);
-        panel.add(Box.createVerticalStrut(20));
-
         // Register Button
         JButton registerButton = new JButton("Register Event");
         registerButton.setAlignmentX(Component.CENTER_ALIGNMENT);

@@ -50,3 +50,4 @@ public class LoginFrame {
         frame.setVisible(true);
     }
 }
+

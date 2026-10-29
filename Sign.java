@@ -27,8 +27,36 @@ public class Sign {
 
         JTextField nameField = new JTextField();
         JTextField rollField = new JTextField();
+
         JTextField departmentField = new JTextField();
         JTextField semesterField = new JTextField();
+
+        JRadioButton dep1 = new JRadioButton("CSE");
+        JRadioButton dep2 = new JRadioButton("EEE");
+        JRadioButton dep3 = new JRadioButton("ECE");
+        JRadioButton dep4 = new JRadioButton("MECH");
+        ButtonGroup group = new ButtonGroup();
+        group.add(dep1);
+        group.add(dep2);
+        group.add(dep3);
+        group.add(dep4);
+        JRadioButton s1= new JRadioButton("S1");
+        JRadioButton s2= new JRadioButton("S2");
+        JRadioButton s3= new JRadioButton("S3");
+        JRadioButton s4= new JRadioButton("S4");
+        JRadioButton s5= new JRadioButton("S5");
+        JRadioButton s6= new JRadioButton("S6");
+        JRadioButton s7= new JRadioButton("S7");
+        JRadioButton s8= new JRadioButton("S8");
+        ButtonGroup grp = new ButtonGroup();
+        grp.add(s1);
+        grp.add(s2);
+        grp.add(s3);
+        grp.add(s4);
+        grp.add(s5);
+        grp.add(s6);
+        grp.add(s7);
+        grp.add(s8);
         JTextField collegeField = new JTextField();
         JTextField emailField = new JTextField();
         JTextField phoneField = new JTextField();
@@ -49,6 +77,20 @@ public class Sign {
 
         frame.add(semesterLabel);
         frame.add(semesterField);
+        frame.add(dep1);
+        frame.add(dep2);
+        frame.add(dep3);
+        frame.add(dep4);
+        
+        frame.add(semesterLabel);
+        frame.add(s1);
+        frame.add(s2);
+        frame.add(s3);
+        frame.add(s4);
+        frame.add(s5);
+        frame.add(s6);
+        frame.add(s7);
+        frame.add(s8);
 
         frame.add(collegeLabel);
         frame.add(collegeField);
@@ -75,3 +117,5 @@ public class Sign {
         frame.setVisible(true);
     }
 }
+
+

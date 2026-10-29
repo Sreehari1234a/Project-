@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import javax.swing.JFrame;
 
 public class EventFrame extends JFrame {
@@ -7,6 +9,7 @@ public class EventFrame extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(5, 1, 10, 10));
 

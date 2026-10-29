@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class PFiveFrames {
+public class PFiveframes {
 
     public static void main(String[] args) {
 

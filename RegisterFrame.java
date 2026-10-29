@@ -11,6 +11,6 @@ public class RegisterFrame extends JFrame {
 
     public static void main(String[] args) {
             new RegisterFrame().setVisible(true);
-        });
+        };
     }
-}
+

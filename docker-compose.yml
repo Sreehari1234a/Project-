@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: cem-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cem
+      POSTGRES_USER: cem_dev
+      POSTGRES_PASSWORD: change_me_for_local_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - cem_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  cem_postgres_data:

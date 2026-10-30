@@ -1,100 +1,85 @@
+
 import javax.swing.*;
 import java.awt.*;
 
-public class DashboardFrame extends JFrame {
+public class DashboardFrame extends BaseFrame {
 
-    public DashboardFrame() {
+    private final String role;
 
-        // Window settings
-        setTitle("Campus Event Manager");
-        setSize(800, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+    public DashboardFrame(String role) {
+        super("CampusConnect - " + role + " Dashboard");
+        this.role = role;
 
-        // Main white panel
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(Color.WHITE);
+        Account account = AppData.currentAccount;
 
-        // ---------------- HEADER ----------------
+        String name = account == null
+                ? ""
+                : account.getName();
 
-        JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(Color.WHITE);
+        JPanel page = createPage(
+            role + " Dashboard",
+            "Welcome, " + name
+        );
 
-        JLabel title = new JLabel("Campus Event Manager");
-        title.setFont(new Font("Arial", Font.BOLD, 25));
+        JPanel buttons = new JPanel(new GridLayout(0, 1, 12, 12));
+        buttons.setOpaque(false);
 
-        // Three dot button
-        JButton menuButton = new JButton("⋮");
-        menuButton.setFont(new Font("Arial", Font.BOLD, 25));
-        menuButton.setBorderPainted(false);
-        menuButton.setFocusPainted(false);
-        menuButton.setBackground(Color.WHITE);
+        JButton profile = createButton("My Profile");
 
-        // Three-dot menu
-        JPopupMenu menu = new JPopupMenu();
-
-        JMenuItem profile = new JMenuItem("Profile");
-        JMenuItem settings = new JMenuItem("Settings");
-
-        menu.add(profile);
-        menu.add(settings);
-
-        menuButton.addActionListener(e -> {
-            menu.show(menuButton, 0, menuButton.getHeight());
+        profile.addActionListener(e -> {
+            new ProfileFrame().setVisible(true);
+            dispose();
         });
 
-        header.add(title, BorderLayout.WEST);
-        header.add(menuButton, BorderLayout.EAST);
+        buttons.add(profile);
 
-        // ---------------- CENTER ----------------
+        if (role.equals("Student")) {
+            JButton events = createButton("Browse Events");
+            JButton registrations =
+                createButton("My Registrations");
 
-        JPanel centerPanel = new JPanel();
-        centerPanel.setBackground(Color.WHITE);
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+            events.addActionListener(e -> {
+                new EventsFrame(false).setVisible(true);
+                dispose();
+            });
 
-        JLabel welcome = new JLabel("Welcome to Campus Event Manager");
-        welcome.setFont(new Font("Arial", Font.BOLD, 28));
-        welcome.setAlignmentX(Component.CENTER_ALIGNMENT);
+            registrations.addActionListener(e -> {
+                new RegistrationsFrame().setVisible(true);
+                dispose();
+            });
 
-        JLabel instruction = new JLabel("Please select your role");
-        instruction.setFont(new Font("Arial", Font.PLAIN, 18));
-        instruction.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttons.add(events);
+            buttons.add(registrations);
 
-        // Student button
-        JButton studentButton = new JButton("Student");
-        studentButton.setFont(new Font("Arial", Font.BOLD, 18));
-        studentButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        studentButton.setPreferredSize(new Dimension(220, 55));
-        studentButton.setMaximumSize(new Dimension(220, 55));
+        } else {
+            JButton create = createButton("Create Event");
+            JButton events = createButton("View Events");
 
-        // Organizer button
-        JButton organizerButton = new JButton("Organizer");
-        organizerButton.setFont(new Font("Arial", Font.BOLD, 18));
-        organizerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        organizerButton.setPreferredSize(new Dimension(220, 55));
-        organizerButton.setMaximumSize(new Dimension(220, 55));
+            create.addActionListener(e -> {
+                new CreateEventFrame().setVisible(true);
+                dispose();
+            });
 
-        // Space between components
-        centerPanel.add(Box.createVerticalGlue());
-        centerPanel.add(welcome);
-        centerPanel.add(Box.createVerticalStrut(15));
-        centerPanel.add(instruction);
-        centerPanel.add(Box.createVerticalStrut(30));
-        centerPanel.add(studentButton);
-        centerPanel.add(Box.createVerticalStrut(15));
-        centerPanel.add(organizerButton);
-        centerPanel.add(Box.createVerticalGlue());
+            events.addActionListener(e -> {
+                new EventsFrame(true).setVisible(true);
+                dispose();
+            });
 
-        // Add everything
-        mainPanel.add(header, BorderLayout.NORTH);
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
+            buttons.add(create);
+            buttons.add(events);
+        }
 
-        add(mainPanel);
-    }
+        JButton logout = createButton("Logout");
 
-    public static void main(String[] args) {
+        logout.addActionListener(e -> {
+            AppData.currentAccount = null;
+            new RoleSelectionFrame().setVisible(true);
+            dispose();
+        });
 
-        DashboardFrame frame = new DashboardFrame();
-        frame.setVisible(true);
+        buttons.add(logout);
+
+        page.add(buttons, BorderLayout.CENTER);
+        setContentPane(page);
     }
 }

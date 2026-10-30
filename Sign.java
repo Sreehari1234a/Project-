@@ -27,6 +27,10 @@ public class Sign {
 
         JTextField nameField = new JTextField();
         JTextField rollField = new JTextField();
+
+        JTextField departmentField = new JTextField();
+        JTextField semesterField = new JTextField();
+
         JRadioButton dep1 = new JRadioButton("CSE");
         JRadioButton dep2 = new JRadioButton("EEE");
         JRadioButton dep3 = new JRadioButton("ECE");
@@ -69,6 +73,10 @@ public class Sign {
         frame.add(rollField);
 
         frame.add(departmentLabel);
+        frame.add(departmentField);
+
+        frame.add(semesterLabel);
+        frame.add(semesterField);
         frame.add(dep1);
         frame.add(dep2);
         frame.add(dep3);
@@ -109,3 +117,5 @@ public class Sign {
         frame.setVisible(true);
     }
 }
+
+

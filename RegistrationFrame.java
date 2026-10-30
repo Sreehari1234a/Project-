@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt .*;
 import javax.swing.JFrame;
 
 public class RegistrationFrame extends JFrame {
@@ -29,6 +31,7 @@ public class RegistrationFrame extends JFrame {
         panel.add(event1);
         panel.add(event2);
         panel.add(close);
+
 
     }
 

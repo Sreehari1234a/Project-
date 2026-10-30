@@ -1,3 +1,5 @@
+import javax. swing.*;
+import java .awt .*;
 import javax.swing.JFrame;
 
 public class EventDetailsFrame extends JFrame {
@@ -7,11 +9,19 @@ public class EventDetailsFrame extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+
+    }
+
+    public static void main(String[] args) {
+       
+            new EventDetailsFrame().setVisible(true);
+      
+
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(4, 1, 10, 10));
 
         JLabel title = new JLabel(
-                eventName,
+                "eventName",
                 SwingConstants.CENTER
         );
 
@@ -32,10 +42,9 @@ public class EventDetailsFrame extends JFrame {
         panel.add(venue);
         panel.add(register);
     }
-
-    public static void main(String[] args) {
+ {
         java.awt.EventQueue.invokeLater(() -> {
             new EventDetailsFrame().setVisible(true);
-        });
+ });
     }
 }

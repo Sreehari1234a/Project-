@@ -1,10 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class ParticipantProfileFrame extends JFrame {
-
-    public ParticipantProfileFrame() {
-
+public class ParticipantProfileFrame extends JFrame
+{
+    public ParticipantProfileFrame()
+    {
         setTitle("My Profile");
         setSize(650, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -55,5 +55,10 @@ public class ParticipantProfileFrame extends JFrame {
 
         mainPanel.add(phoneLabel);
         mainPanel.add(phoneField);
-        main
+        mainPanel.add(Box.createVerticalStrut(12));
+
+        setContentPane(mainPanel);
+    }
+}
+
 

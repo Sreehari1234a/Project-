@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CampusConnect</title>
+<style>
+:root{--primary:#6558e8;--dark:#211d45;--bg:#f5f6ff;--green:#0d9974}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--dark)}
+header{background:var(--dark);color:white;padding:18px 7%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:23px;font-weight:bold}
+header button{width:auto;margin:0;background:#393263}
+main{max-width:1050px;margin:35px auto;padding:0 18px}
+.card{background:white;border-radius:18px;padding:28px;box-shadow:0 8px 35px #25205c12;margin-bottom:20px}
+.auth{max-width:470px;margin:45px auto}
+h1,h2{margin-top:0}
+p{color:#74758a;line-height:1.6}
+label{display:block;font-weight:bold;font-size:14px;margin:14px 0 7px}
+input,select,textarea{width:100%;padding:13px;border:1px solid #dedff0;border-radius:9px;font-size:15px;background:white}
+button{border:0;border-radius:9px;padding:13px 17px;background:var(--primary);color:white;font-weight:bold;cursor:pointer;margin-top:12px}
+button:hover{filter:brightness(.94)}
+.full{width:100%}
+.secondary{background:#eceaff;color:var(--primary)}
+.green{background:var(--green)}
+.danger{background:#c43e56}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.tabs button{flex:1}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.event{border:1px solid #e7e6f4;border-radius:13px;padding:18px}
+.small{font-size:13px;color:#77778a}
+.notice{padding:12px;border-radius:9px;margin:12px 0;background:#eeeaff}
+.hidden{display:none!important}
+a{color:var(--primary);cursor:pointer}
+footer{text-align:center;color:#89899b;padding:25px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🎓 CampusConnect</div>
+  <div id="headerActions"></div>
+</header>
+<main id="app"></main>
+<footer>CampusConnect · Learn · Connect · Participate</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const read = (key, fallback=[]) => {
+  try { return JSON.parse(localStorage.getItem(key)) || fallback; }
+  catch { return fallback; }
+};
+const save = (key, value) =>
+  localStorage.setItem(key, JSON.stringify(value));
+
+let currentUser = null;
+let activePage = "events";
+
+function message(text) {
+  alert(text);
+}
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  }[c]));
+}
+function showHeader() {
+  $("headerActions").innerHTML = currentUser
+    ? `<span>${escapeHTML(currentUser.name)} · ${escapeHTML(currentUser.role)}</span>
+       <button onclick="logout()">Logout</button>`
+    : `<button onclick="home()">Home</button>`;
+}
+function home() {
+  showHeader();
+  $("app").innerHTML = `
+    <section class="card auth">
+      <h1>Welcome to CampusConnect 👋</h1>
+      <p>Your college event registration portal.</p>
+      <label>Continue as</label>
+      <select id="role">
+        <option value="Student">Student</option>
+        <option value="Organizer">Organizer</option>
+      </select>
+      <button class="full" onclick="showAuth('login')">Login</button>
+      <button class="full secondary" onclick="showAuth('signup')">Create Account / Sign Up</button>
+      <p class="small">Demo version: accounts are stored in this browser.</p>
+    </section>`;
+}
+function showAuth(mode) {
+  const role = $("role")?.value || currentUser?.role || "Student";
+  $("app").innerHTML = `
+    <section class="card auth">
+      <h2>${mode === "signup" ? "Create your account" : "Welcome back"}</h2>
+      <p>${escapeHTML(role)} portal</p>
+      <form id="authForm">
+        ${mode === "signup" ? `
+          <label>Full Name</label>
+          <input id="name" required maxlength="80" autocomplete="name">
+        ` : ""}
+        <label>Email Address</label>
+        <input id="email" type="email" required autocomplete="email">
+        <label>Password (minimum 8 characters)</label>
+        <input id="password" type="password" required minlength="8"
+               autocomplete="${mode === "signup" ? "new-password" : "current-password"}">
+        ${mode === "signup" && role === "Student" ? `
+          <label>Department</label>
+          <select id="department">
+            <option value="CSE">Computer Science (CSE)</option>
+            <option value="ECE">Electronics (ECE)</option>
+            <option value="EEE">Electrical (EEE)</option>
+            <option value="Civil">Civil</option>
+            <option value="Mechanical">Mechanical</option>
+            <option value="Other">Other</option>
+          </select>
+          <label>Semester</label>
+          <select id="semester">
+            ${[1,2,3,4,5,6,7,8].map(n=>`<option value="S${n}">Semester ${n}</option>`).join("")}
+          </select>` : ""}
+        <button class="full" type="submit">${mode === "signup" ? "Sign Up" : "Login"}</button>
+      </form>
+      <button class="full secondary" onclick="home()">← Back</button>
+      <div id="authMessage" class="notice hidden"></div>
+    </section>`;
+
+  $("authForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const email = $("email").value.trim().toLowerCase();
+    const password = $("password").value;
+    const users = read("cc_users");
+
+    if (mode === "signup") {
+      const name = $("name").value.trim();
+      if (!name) return message("Please enter your name.");
+      if (users.some(u => u.email === email && u.role === role))
+        return message("This email already has an account for this role.");
+
+      const user = {
+        id: crypto.randomUUID(),
+        name, email, password, role,
+        department: role === "Student" ? $("department").value : "",
+        semester: role === "Student" ? $("semester").value : ""
+      };
+      users.push(user);
+      save("cc_users", users);
+      currentUser = user;
+      message("Account created successfully!");
+      dashboard();
+    } else {
+      const user = users.find(u =>
+        u.email === email && u.password === password && u.role === role
+      );
+      if (!user) return message("Incorrect email/password, or account not found. Please sign up first.");
+      currentUser = user;
+      dashboard();
+    }
+  });
+}
+function requireLogin() {
+  if (!currentUser) { home(); return false; }
+  return true;
+}
+function dashboard() {
+  if (!requireLogin()) return;
+  showHeader();
+  const isStudent = currentUser.role === "Student";
+  $("app").innerHTML = `
+    <section class="card">
+      <h1>Hello, ${escapeHTML(currentUser.name)}!</h1>
+      <p>${isStudent ? "Discover college events and manage your registrations." : "Create events and review registrations."}</p>
+      ${isStudent ? `
+        <div class="tabs">
+          <button onclick="showEvents()">Browse Events</button>
+          <button class="secondary" onclick="myRegistrations()">My Registrations</button>
+          <button class="secondary" onclick="profile()">My Profile</button>
+        </div>
+        <div id="content"></div>
+      ` : `
+        <div class="tabs">
+          <button onclick="createEventForm()">+ Create Event</button>
+          <button class="secondary" onclick="showEvents()">View Events</button>
+          <button class="secondary" onclick="myCreatedEvents()">My Events</button>
+        </div>
+        <div id="content"></div>
+      `}
+    </section>`;
+  if (isStudent) showEvents(); else myCreatedEvents();
+}
+function showEvents() {
+  if (!requireLogin()) return;
+  activePage = "events";
+  const events = read("cc_events");
+  $("content").innerHTML = events.length ? `<div class="grid">${
+    events.map(ev => `
+      <article class="event">
+        <h3>${escapeHTML(ev.title)}</h3>
+        <p>${escapeHTML(ev.description || "College event")}</p>
+        <p>📅 ${escapeHTML(ev.date || "Date not set")}</p>
+        <p class="small">Organizer: ${escapeHTML(ev.organizerName)}</p>
+        ${currentUser.role === "Student" ? `
+          <button onclick="registerEvent('${ev.id}')">Register</button>
+        ` : `
+          <button class="secondary" onclick="viewParticipants('${ev.id}')">Participants</button>
+        `}
+      </article>`).join("")
+  }</div>` : `<p>No events have been created yet.</p>`;
+}
+function createEventForm() {
+  if (!requireLogin() || currentUser.role !== "Organizer") return;
+  $("content").innerHTML = `
+    <div class="event">
+      <h2>Create a new event</h2>
+      <form id="eventForm">
+        <label>Event Name</label><input id="eventTitle" required maxlength="120">
+        <label>Description</label><textarea id="eventDescription" rows="3"></textarea>
+        <label>Event Date</label><input id="eventDate" type="date" required>
+        <button type="submit">Save Event</button>
+      </form>
+    </div>`;
+  $("eventForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const events = read("cc_events");
+    events.push({
+      id: crypto.randomUUID(),
+      title: $("eventTitle").value.trim(),
+      description: $("eventDescription").value.trim(),
+      date: $("eventDate").value,
+      organizerId: currentUser.id,
+      organizerName: currentUser.name
+    });
+    save("cc_events", events);
+    message("Event created!");
+    myCreatedEvents();
+  });
+}
+function myCreatedEvents() {
+  if (!requireLogin() || currentUser.role !== "Organizer") return;
+  const events = read("cc_events").filter(e => e.organizerId === currentUser.id);
+  $("content").innerHTML = `
+    <h2>My Events</h2>
+    <button onclick="createEventForm()">+ Create Event</button>
+    ${events.length ? `<div class="grid">${events.map(e => `
+      <article class="event">
+        <h3>${escapeHTML(e.title)}</h3>
+        <p>${escapeHTML(e.date)}</p>
+        <button class="secondary" onclick="viewParticipants('${e.id}')">View Participants</button>
+      </article>`).join("")}</div>` : "<p>You haven't created any events yet.</p>"}`;
+}
+function registerEvent(eventId) {
+  if (!requireLogin() || currentUser.role !== "Student") return;
+  const registrations = read("cc_registrations");
+  if (registrations.some(r => r.eventId === eventId && r.studentId === currentUser.id))
+    return message("You have already registered for this event.");
+  registrations.push({
+    id: crypto.randomUUID(),
+    eventId, studentId: currentUser.id,
+    studentName: currentUser.name,
+    studentEmail: currentUser.email
+  });
+  save("cc_registrations", registrations);
+  message("Registration successful!");
+  showEvents();
+}
+function myRegistrations() {
+  if (!requireLogin() || currentUser.role !== "Student") return;
+  const registrations = read("cc_registrations").filter(r => r.studentId === currentUser.id);
+  const events = read("cc_events");
+  $("content").innerHTML = `<h2>My Registrations</h2>` +
+    (registrations.length ? `<div class="grid">${
+      registrations.map(r => {
+        const ev = events.find(e => e.id === r.eventId);
+        return ev ? `<article class="event"><h3>${escapeHTML(ev.title)}</h3>
+          <p>${escapeHTML(ev.date)}</p></article>` : "";
+      }).join("")
+    }</div>` : "<p>You have not registered for any events yet.</p>");
+}
+function profile() {
+  if (!requireLogin()) return;
+  $("content").innerHTML = `
+    <h2>My Profile</h2>
+    <p><b>Name:</b> ${escapeHTML(currentUser.name)}</p>
+    <p><b>Email:</b> ${escapeHTML(currentUser.email)}</p>
+    <p><b>Role:</b> ${escapeHTML(currentUser.role)}</p>
+    ${currentUser.role === "Student" ? `
+      <p><b>Department:</b> ${escapeHTML(currentUser.department)}</p>
+      <p><b>Semester:</b> ${escapeHTML(currentUser.semester)}</p>` : ""}`;
+}
+function viewParticipants(eventId) {
+  if (!requireLogin() || currentUser.role !== "Organizer") return;
+  const event = read("cc_events").find(e => e.id === eventId);
+  if (!event || event.organizerId !== currentUser.id)
+    return message("You can only view participants for your own events.");
+  const people = read("cc_registrations").filter(r => r.eventId === eventId);
+  $("content").innerHTML = `<h2>Participants: ${escapeHTML(event.title)}</h2>` +
+    (people.length ? people.map(p => `
+      <article class="event">
+        <b>${escapeHTML(p.studentName)}</b>
+        <p>${escapeHTML(p.studentEmail)}</p>
+      </article>`).join("") : "<p>No registrations yet.</p>");
+}
+function logout() {
+  currentUser = null;
+  home();
+}
+home();
+</script>
+</body>
+</html>
+
